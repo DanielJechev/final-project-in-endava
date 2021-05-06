@@ -71,12 +71,12 @@ public class SuperMarketServiceImpl implements SuperMarketService {
     private List<Item> updateItemList(List<Item> itemList) {
         Optional<Item> currentItem;
         for (int i = 0; i < itemList.size(); i++) {
-             currentItem = itemRepository.findById(itemList.get(i).getId());
+            currentItem = itemRepository.findById(itemList.get(i).getId());
 
-            if (currentItem.isEmpty()){
-           throw  new ItemNotFoundException("This item does not exist!");
+            if (currentItem.isEmpty()) {
+                throw new ItemNotFoundException("This item does not exist!");
             }
-            itemList.set(i,currentItem.get());
+            itemList.set(i, currentItem.get());
         }
 
         return itemList;

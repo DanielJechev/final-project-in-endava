@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Purchase extends BaseEntity {
-@NotBlank
+    @NotBlank
     private String superMarketId;
 
     @NotNull
@@ -36,7 +36,6 @@ public class Purchase extends BaseEntity {
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "purchase_item", joinColumns = {@JoinColumn(name = "purchase_id")}, inverseJoinColumns = {@JoinColumn(name = "item_id")})
     private List<Item> itemList;
-
 
     private Double cashAmount;
 

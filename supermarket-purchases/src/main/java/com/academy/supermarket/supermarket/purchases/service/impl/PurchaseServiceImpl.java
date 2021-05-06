@@ -7,7 +7,6 @@ import com.academy.supermarket.supermarket.purchases.model.dto.PurchaseAddDto;
 import com.academy.supermarket.supermarket.purchases.model.entities.Item;
 import com.academy.supermarket.supermarket.purchases.model.entities.Purchase;
 import com.academy.supermarket.supermarket.purchases.model.entities.SuperMarket;
-import com.academy.supermarket.supermarket.purchases.model.enums.ItemType;
 import com.academy.supermarket.supermarket.purchases.model.enums.PaymentType;
 import com.academy.supermarket.supermarket.purchases.repostitory.ItemRepository;
 import com.academy.supermarket.supermarket.purchases.repostitory.PurchaseRepository;

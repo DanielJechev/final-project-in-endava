@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -35,5 +34,4 @@ public class SuperMarket extends BaseEntity {
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "superMarket_items", joinColumns = {@JoinColumn(name = "superMarket_id")}, inverseJoinColumns = {@JoinColumn(name = "item_id")})
     private List<Item> itemList;
-
 }

@@ -27,7 +27,6 @@ public class PurchaseController {
         this.purchaseService = purchaseService;
     }
 
-
     @PostMapping
     public ResponseEntity<PurchaseResponseDto> buyItemsFromSupermarket(@Valid @RequestBody PurchaseAddDto purchaseSupermarketDto) {
         Purchase newPurchase = this.purchaseService.makePurchase(purchaseSupermarketDto);

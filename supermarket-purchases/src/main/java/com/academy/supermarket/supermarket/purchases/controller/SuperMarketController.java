@@ -41,13 +41,10 @@ public class SuperMarketController {
         return new ResponseEntity<>(modelMapper.map(superMarket, SuperMarketAddDto.class), HttpStatus.OK);
     }
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<SuperMarketGetDto> getSupermarketById(@PathVariable(value = "id", required = true) String supermarketId) {
         SuperMarket supermarket = this.superMarketService.getSupermarketById(supermarketId);
         return new ResponseEntity<>(modelMapper.map(supermarket, SuperMarketGetDto.class), HttpStatus.OK);
     }
-
 
 }

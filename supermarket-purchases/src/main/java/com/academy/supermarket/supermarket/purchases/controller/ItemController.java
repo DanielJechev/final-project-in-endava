@@ -30,7 +30,4 @@ public class ItemController {
         Item savedItem = itemService.createItem(itemDto);
         return new ResponseEntity(modelMapper.map(savedItem, ItemDto.class), HttpStatus.CREATED);
     }
-
-
-
 }

@@ -1,17 +1,13 @@
 package com.academy.supermarket.supermarket.purchases.model.dto;
 
 import com.academy.supermarket.supermarket.purchases.model.entities.Item;
-import com.academy.supermarket.supermarket.purchases.model.entities.SuperMarket;
-import com.academy.supermarket.supermarket.purchases.model.enums.PaymentType;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -19,16 +15,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PurchaseAddDto {
-   @NotBlank
+    @NotBlank
     private String superMarketId;
-@NotEmpty
+
+    @NotEmpty
     private List<Item> itemList;
 
     @NotNull
     private String paymentType;
 
-
     private Double cashAmount;
-
-
 }
