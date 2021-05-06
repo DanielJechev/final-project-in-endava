@@ -1,32 +1,27 @@
 package com.academy.supermarket.supermarket.purchases.service.impl;
 
+import com.academy.supermarket.supermarket.purchases.exception.ItemNotFoundException;
 import com.academy.supermarket.supermarket.purchases.exception.SuperMarketAlreadyExistsException;
 import com.academy.supermarket.supermarket.purchases.exception.SuperMarketNotFoundException;
 import com.academy.supermarket.supermarket.purchases.model.dto.SuperMarketAddDto;
+import com.academy.supermarket.supermarket.purchases.model.dto.SuperMarketDto;
 import com.academy.supermarket.supermarket.purchases.model.entities.Item;
 import com.academy.supermarket.supermarket.purchases.model.entities.SuperMarket;
-import com.academy.supermarket.supermarket.purchases.model.param.FilterParam;
-import com.academy.supermarket.supermarket.purchases.model.param.PageParam;
 import com.academy.supermarket.supermarket.purchases.repostitory.ItemRepository;
 import com.academy.supermarket.supermarket.purchases.repostitory.SuperMarketRepository;
 import com.academy.supermarket.supermarket.purchases.service.SuperMarketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class SuperMarketServiceImpl implements SuperMarketService {
     private SuperMarketRepository superMarketRepository;
     private ItemRepository itemRepository;
-    public static final String ID = "id";
 
     @Autowired
     public SuperMarketServiceImpl(SuperMarketRepository superMarketRepository, ItemRepository itemRepository) {
@@ -35,63 +30,57 @@ public class SuperMarketServiceImpl implements SuperMarketService {
     }
 
     @Override
-    public SuperMarket createSuperMarket(SuperMarket superMarket) {
+    public SuperMarket createSuperMarket(SuperMarketDto superMarketDto) {
         SuperMarket superMarketExample = new SuperMarket();
 
-        superMarketExample.setName(superMarket.getName());
+        superMarketExample.setName(superMarketDto.getName());
         Example<SuperMarket> example = Example.of(superMarketExample);
-        Optional<SuperMarket> optionalUser = superMarketRepository.findOne(example);
-        if (optionalUser.isPresent()) {
+        Optional<SuperMarket> optionalSuperMarket = superMarketRepository.findOne(example);
+        if (optionalSuperMarket.isPresent()) {
             throw new SuperMarketAlreadyExistsException("SuperMarket with this name already exists!");
         }
 
-        superMarketExample.setAddress(superMarket.getAddress());
-        superMarketExample.setPhoneNumber(superMarket.getPhoneNumber());
-        superMarketExample.setWorkHours(superMarket.getWorkHours());
+        superMarketExample.setAddress(superMarketDto.getAddress());
+        superMarketExample.setPhoneNumber(superMarketDto.getPhoneNumber());
+        superMarketExample.setWorkHours(superMarketDto.getWorkHours());
 
-        return superMarketRepository.save(superMarket);
+        return superMarketRepository.save(superMarketExample);
     }
 
     @Override
-    public SuperMarket addItemsToSupermarket(int id, SuperMarketAddDto superMarketAddDto) {
-        SuperMarket superMarket = getSuperMarketById(id);
-
-        List<Item> itemList = updateItemList(superMarketAddDto.getItemList());
-
-        superMarket.setItemList(itemList);
+    public SuperMarket addItemsToSupermarket(SuperMarketAddDto superMarketAddDto) {
+        SuperMarket superMarket = getSuperMarketById(superMarketAddDto.getId());
+        List<Item> itemLists = updateItemList(superMarketAddDto.getItemList());
+        superMarket.setItemList(itemLists);
         return superMarketRepository.save(superMarket);
+
     }
 
     @Override
-    public Page<SuperMarket> getAll(PageParam pageParam, FilterParam filterParam) {
-        SuperMarket superMarket = new SuperMarket();
-        if (Objects.equals(filterParam.getSearchBy(), ID)) {
-            superMarket.setId(filterParam.getSearchText());
-        }
-
-        Example<SuperMarket> example = Example.of(superMarket);
-        Pageable allOfSuperMarket = PageRequest.of(pageParam.getPage() - 1, pageParam.getLimit());
-
-        return this.superMarketRepository.findAll(example, allOfSuperMarket);
+    public SuperMarket getSupermarketById(String supermarketId) {
+        return this.superMarketRepository.findById(supermarketId).get();
     }
 
-    private List<Item> updateItemList(List<Item> itemList) {
-        Item currentItem;
-        for (int i = 0; i < itemList.size(); i++) {
-            currentItem = itemRepository.findByName(itemList.get(i).getName())
-                    .orElse(itemList.get(i));
-            if (Objects.isNull(currentItem.getId())) {
-                currentItem = itemRepository.save(currentItem);
-            }
-            itemList.set(i, currentItem);
-        }
-        return itemList;
-    }
-
-    private SuperMarket getSuperMarketById(Integer id) {
+    private SuperMarket getSuperMarketById(String id) {
         SuperMarket superMarketExample = new SuperMarket();
         superMarketExample.setId(id);
         Example<SuperMarket> example = Example.of(superMarketExample);
         return superMarketRepository.findOne(example).orElseThrow(() -> new SuperMarketNotFoundException(MessageFormat.format("Supermarket with id:{0} not found!", id)));
     }
+
+    private List<Item> updateItemList(List<Item> itemList) {
+        Optional<Item> currentItem;
+        for (int i = 0; i < itemList.size(); i++) {
+             currentItem = itemRepository.findById(itemList.get(i).getId());
+
+            if (currentItem.isEmpty()){
+           throw  new ItemNotFoundException("This item does not exist!");
+            }
+            itemList.set(i,currentItem.get());
+        }
+
+        return itemList;
+    }
+
+
 }

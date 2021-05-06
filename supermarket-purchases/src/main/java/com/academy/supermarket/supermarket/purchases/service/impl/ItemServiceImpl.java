@@ -1,6 +1,9 @@
 package com.academy.supermarket.supermarket.purchases.service.impl;
 
+import com.academy.supermarket.supermarket.purchases.exception.ItemTypeInvalidException;
+import com.academy.supermarket.supermarket.purchases.model.dto.ItemDto;
 import com.academy.supermarket.supermarket.purchases.model.entities.Item;
+import com.academy.supermarket.supermarket.purchases.model.enums.ItemType;
 import com.academy.supermarket.supermarket.purchases.repostitory.ItemRepository;
 import com.academy.supermarket.supermarket.purchases.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +19,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item createItem(Item item) {
+    public Item createItem(ItemDto itemDto) {
         Item itemExample = new Item();
-        itemExample.setName(item.getName());
-        itemExample.setPrice(item.getPrice());
-        itemExample.setType(item.getType());
-        return itemRepository.save(item);
+        if (!ItemType.contains(itemDto.getType())) {
+            throw new ItemTypeInvalidException("Invalid item type.");
+        }
+
+        itemExample.setName(itemDto.getName());
+        itemExample.setPrice(itemDto.getPrice());
+        itemExample.setType(ItemType.valueOf(itemDto.getType()));
+
+        return itemRepository.save(itemExample);
     }
 }

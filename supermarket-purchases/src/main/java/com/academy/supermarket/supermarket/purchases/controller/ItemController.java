@@ -25,11 +25,12 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto itemDto) {
-        Item savedItem = itemService.createItem(modelMapper.map(itemDto, Item.class));
+        Item savedItem = itemService.createItem(itemDto);
         return new ResponseEntity(modelMapper.map(savedItem, ItemDto.class), HttpStatus.CREATED);
     }
+
 
 
 }

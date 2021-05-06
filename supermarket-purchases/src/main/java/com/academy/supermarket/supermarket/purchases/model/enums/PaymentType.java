@@ -1,7 +1,7 @@
 package com.academy.supermarket.supermarket.purchases.model.enums;
 
-public enum ItemType {
-    FOOD, DRINKS, TECHNOLOGY, HOUSEHOLD;
+public enum PaymentType {
+    CASH, CARD;
 
     public static boolean contains(String type) {
         for (ItemType it : ItemType.values()) {

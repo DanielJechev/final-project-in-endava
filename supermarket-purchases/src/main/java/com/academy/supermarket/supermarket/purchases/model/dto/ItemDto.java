@@ -1,6 +1,5 @@
 package com.academy.supermarket.supermarket.purchases.model.dto;
 
-import com.academy.supermarket.supermarket.purchases.model.enums.ItemType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,6 @@ public class ItemDto {
     private Double price;
 
     @NotNull(message = "Please,choose valid type between FOOD, DRINKS, TECHNOLOGY, HOUSEHOLD")
-    private ItemType type;
+    private String type;
 
 }
-

@@ -19,11 +19,13 @@ public class SuperMarketDto {
     private String name;
 
     @NotBlank(message = "The field cannot be empty. Please, provide Address!")
+    @Length(max = 128, message = "Invalid address size. It should be max 128 characters!")
     @Pattern(regexp = "^.+,.+,.+$", message = "Please enter (country,city,street) separated by comma!")
     private String address;
 
     @Pattern(regexp = "08[789]\\d{7}", message = "Please,enter real phone number!")
     private String phoneNumber;
+
     @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Please,enter  when (open:closed for =>example 9:22) separated by colon !")
     private String workHours;
 }
